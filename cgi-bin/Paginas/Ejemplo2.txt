@@ -1,0 +1,3 @@
+Para este ejemplo, puedes probar
+a utilizar la funcion "borrar"
+en la pagina de listas

@@ -22,7 +22,7 @@ print "<p>El archivo '$titulo.txt' ha sido eliminado correctamente.</p>";
 
 print<<HTML;
         <br>
-        <a href="list.pl">Regresar al Listado</a>
+        <a class="enlace" href="list.pl">Regresar al Listado</a>
     </body>
 </html>
 HTML

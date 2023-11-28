@@ -12,6 +12,7 @@ open(my $txt, '>', $archivo) or die "No se pudo abrir el archivo '$archivo' $!";
 print $txt "$cuerpo";
 close $txt;
 
+$cuerpo =~ s/\n/<br>/g;
 print "Content-type: text/html\n\n";
 print<<HTML;
 <html>
@@ -20,10 +21,11 @@ print<<HTML;
 		<link rel="stylesheet" type="text/css" href="../Estilos.css">
 	</head>
 	<body>
-		<h1>La pagina " $titulo "ha sido creada correctamente</h1>
-		<form method="post" action="list.pl">
-			<input type="submit" value="Regresar a la pagina de Listado">
-		</form>
+		<h1 class="titulo">La pagina " $titulo " ha sido creada correctamente</h1>
+		<p>$cuerpo</p>
+		<h3>Pagina grabada<h3>
+		<a class="enlace" href='list.pl'>Listado de Paginas<br><br></a>
+		<a class="enlace" href='view.pl?titulo=$titulo'>Visualizar</a>
 	</body>
 </html>
 HTML

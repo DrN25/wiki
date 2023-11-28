@@ -11,7 +11,8 @@ print<<HTML;
 		<link rel="stylesheet" type="text/css" href="../Estilos.css">
 	</head>
 	<body>
-		<h1>Nuestras paginas de wiki</h1>
+		<h1 class="titulo">Nuestras paginas de wiki</h1>
+		<table class="tabla">
 HTML
 my $directorio = "Paginas";
 
@@ -20,16 +21,19 @@ while (my $archivo = readdir(DIR)) {
 	next if ($archivo =~ /^\.\.?$/);
     my $titulo = $archivo;
     $titulo =~ s/\.txt$//;
-    print "<a href='view.pl?titulo=$archivo'>$titulo</a><br>";
-	print " <a href='edit.pl?titulo=$titulo'>Editar</a><br>";
-	print " <a href='delete.pl?titulo=$titulo'>Eliminar</a><br>";
+	print "<tr>";
+    print "<td><a class='enlaceNombre' href='view.pl?titulo=$titulo'>$titulo</a></td>";
+	print "<td><a class='enlaceBoton' href='delete.pl?titulo=$titulo'>X</a></td>";
+	print "<td><a class='enlaceBoton' href='edit.pl?titulo=$titulo'>E</a></td>";
+	print "</tr>";
 }
 closedir(DIR);
 
 print<<HTML;
-		<form method="post" action="../new.html">
-			<input type="submit" value="Crear">
-		</form>
+		</table>
+		<br>
+		<a class="enlace" href='../new.html'>Nueva Pagina</a><br><br>
+		<a class="enlace" href='../index.html'>Volver al Inicio</a>
 	</body>
 </html>
 HTML

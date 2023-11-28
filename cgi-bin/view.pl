@@ -15,8 +15,10 @@ print<<HTML;
 		<link rel="stylesheet" type="text/css" href="../Estilos.css">
 	</head>
 	<body>
-		<h1>Contenido de la Pagina</h1>
+		<h1 class="titulo">$titulo</h1>
 HTML
+
+$titulo = $titulo.".txt";
 
 if ($titulo) {
 		my $archivo = "Paginas/$titulo";
@@ -26,12 +28,12 @@ if ($titulo) {
 
 				# Cabeceras
     		if ($linea =~ /^(#{1,6}) (.*?)$/) {
-      			print '<h'.length($1).'>'.$2.'</h'.length($1).'>';
+      			print '<h'.length($1).' class="fondo-texto">'.$2.'</h'.length($1).'>';
     		}
 
    		 	# Negrita y cursiva
     		elsif ($linea =~ /\*\*\*(.*?)\*\*\*/) {
-      			print '<p><strong><em>'.$1.'</em></strong></p>';
+      			print '<p class="fondo-texto"><strong><em>'.$1.'</em></strong></p>';
     		}
 
     		# Negrita y cursiva condicional
@@ -40,32 +42,32 @@ if ($titulo) {
 
       			# Negrita y cursiva dentro
       			if ($text =~ /^(.*?)_([^_]+)_(.*?)$/) {
-        				print "<p><strong>$1<em>$2</em>$3</strong></p>";
+        				print "<p class='fondo-texto'><strong>$1<em>$2</em>$3</strong></p>";
       			} 
       			else {
         				# Solo Negrita
-        				print "<p><strong>$text</strong></p>";
+        				print "<p class='fondo-texto'><strong>$text</strong></p>";
       			}
     		}
 
     		# Listas
     		elsif ($linea =~ /^(\*|\+|\-) (.*?)$/) {
-      			print '<li>'.$2.'</li>';
+      			print '<li class="fondo-texto">'.$2.'</li>';
     		}
 
     		# Cursiva
     		elsif ($linea =~ /\*(.*?)\*(?!\*)/) {
-      			print '<p><em>'.$1.'</em></p>';
+      			print '<p class="fondo-texto"><em>'.$1.'</em></p>';
     		}
 
     		# Texto tachado
     		elsif ($linea =~ /~~(.*?)~~/) {
-      			print '<p><del>'.$1.'</del></p>';
+      			print '<p class="fondo-texto"><del>'.$1.'</del></p>';
     		}
 
     		# Enlaces
     		elsif ($linea =~ /\[(.*?)\]\((.*?)\)/) {
-      			print '<a href="'.$2.'">'.$1.'</a>';
+      			print '<a class="fondo-texto" href="'.$2.'">'.$1.'</a>';
     		}
 
     		# Bloque de codigo 
@@ -74,7 +76,7 @@ if ($titulo) {
       			# si encuentra otro ```, significa que acabo el bloque de codigo
       			# resetea $contenido_bloque_codigo y $es_bloque_codigo = 0 (false)
       			if ($es_bloque_codigo) {
-       					print '<pre><code>'.$contenido_bloque_codigo.'</code></pre>';
+       					print '<pre class="fondo-texto"><code>'.$contenido_bloque_codigo.'</code></pre>';
         				$es_bloque_codigo = 0;
         				$contenido_bloque_codigo = '';
       			} 
@@ -93,7 +95,7 @@ if ($titulo) {
       			else {
         				$linea =~ s/^\s*|\s*$//g;
         				if ($linea ne '') {
-          					print "<p>".$linea."</p>";
+          					print "<p class='fondo-texto'>".$linea."</p>";
         				}
       			}
     		}
@@ -103,8 +105,8 @@ if ($titulo) {
 }
 
 print<<HTML;
-		<br>
-		<a href="list.pl">Regresar al Listado</a>
+		<br><br>
+		<a class="enlace" href="list.pl">Regresar al Listado</a>
 	</body>
 </html>
 HTML

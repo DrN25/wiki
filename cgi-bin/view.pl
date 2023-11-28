@@ -4,12 +4,15 @@ use CGI;
 my $cgi = new CGI;
 
 my $titulo = $cgi->param('titulo');
+my $es_bloque_codigo = 0;
+my $contenido_bloque_codigo = '';
 
 print "Content-type: text/html\n\n";
 print<<HTML;
 <html>
 	<head>
-		<title>Visualizar Página</title>
+		<title>Visualizar Pagina</title>
+		<link rel="stylesheet" type="text/css" href="../Estilos.css">
 	</head>
 	<body>
 		<h1>Contenido de la Pagina</h1>

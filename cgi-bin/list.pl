@@ -8,6 +8,7 @@ print<<HTML;
 <html>
 	<head>
 		<title>Listado</title>
+		<link rel="stylesheet" type="text/css" href="../Estilos.css">
 	</head>
 	<body>
 		<h1>Nuestras paginas de wiki</h1>

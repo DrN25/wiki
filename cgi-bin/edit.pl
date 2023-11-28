@@ -10,6 +10,7 @@ print<<HTML;
 <html>
     <head>
         <title>Editar Página</title>
+		<link rel="stylesheet" type="text/css" href="../Estilos.css">
     </head>
     <body>
         <h1>Editar $titulo</h1>

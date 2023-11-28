@@ -10,6 +10,7 @@ print<<HTML;
 <html>
     <head>
         <title>Eliminar Página</title>
+		<link rel="stylesheet" type="text/css" href="../Estilos.css">
     </head>
     <body>
 HTML

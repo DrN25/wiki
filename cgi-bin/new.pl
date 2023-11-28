@@ -17,6 +17,7 @@ print<<HTML;
 <html>
 	<head>
 		<title>Pagina Creada</title>
+		<link rel="stylesheet" type="text/css" href="../Estilos.css">
 	</head>
 	<body>
 		<h1>La pagina " $titulo "ha sido creada correctamente</h1>

@@ -27,15 +27,22 @@ print <<HTML;
 		<h1 class="titulo">$title</h1>
 HTML
 
+# Prepara la DB pa
 my $query = $dbh->prepare("SELECT * FROM articles WHERE title = ? ");
 $query->execute($title);
 
+# If demas creo, solo extrae el objeto
 if (my $article_data = $query->fetchrow_hashref) {
 
+		# Extrae los datos del Objeto
     my $content = $article_data->{Content};
 
+		# Separa el contenido en lineas cuando hay salto de linea, lo almacena en un arreglo
     my @lines = split (/\n/, $content);
+		# Lee cada linea del arreglo
     foreach my $line (@lines) {
+
+			### CONVERSION MARKDOWN
         # Cabeceras
         if ($line =~ /^(#{1,6}) (.*?)$/) {
             print '<h'.length($1).' class="fondo-texto">'.$2.'</h'.length($1).'>';
@@ -108,8 +115,11 @@ if (my $article_data = $query->fetchrow_hashref) {
                 }
             }
         }
+				### FIN CONVERSION MARKDOWN
     }
 }
 
 print "<br><br><a class='enlace' href='login.pl'>Volver</a>",
 	  "</body></html>";
+		
+# FIN HTML

@@ -1,0 +1,22 @@
+CREATE DATABASE wikipedia;
+
+USE wikipedia;
+
+CREATE TABLE users (
+  UserID INT(11) NOT NULL AUTO_INCREMENT,
+  UserName VARCHAR(255) NOT NULL,
+  Password VARCHAR(255) NOT NULL,
+  FirstName VARCHAR(255) NOT NULL,
+  LastName VARCHAR(255) NOT NULL,
+  PRIMARY KEY (UserID),
+  UNIQUE KEY UserName (UserName)
+);
+
+CREATE TABLE articles (
+  ArticleID INT(11) NOT NULL AUTO_INCREMENT,
+  Title VARCHAR(255) NOT NULL,
+  Content TEXT NOT NULL,
+  Owner VARCHAR(255) NOT NULL,
+  PRIMARY KEY (ArticleID),
+  FOREIGN KEY (Owner) REFERENCES users(UserName)
+);

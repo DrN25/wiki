@@ -1,112 +1,115 @@
 #!"C:/xampp/perl/bin/perl.exe"
 use strict;
+use warnings;
+use DBI;
 use CGI;
+
 my $cgi = new CGI;
 
-my $titulo = $cgi->param('titulo');
+my $db_host = "localhost";
+my $db_name = "wikipedia";
+my $db_user = "root";
+my $db_pass = "";
+
+my $dbh  = DBI->connect("DBI:mysql:database=$db_name;host=$db_host", $db_user, $db_pass) or die "Couldn't connect to the database";
+
+my $title = $cgi->param('title');
 my $es_bloque_codigo = 0;
 my $contenido_bloque_codigo = '';
 
 print "Content-type: text/html\n\n";
-print<<HTML;
+print <<HTML;
 <html>
 	<head>
 		<title>Visualizar Pagina</title>
-		<link rel="stylesheet" type="text/css" href="../Estilos.css">
 	</head>
 	<body>
-		<h1 class="titulo">$titulo</h1>
+		<h1 class="titulo">$title</h1>
 HTML
 
-$titulo = $titulo.".txt";
+my $query = $dbh->prepare("SELECT * FROM articles WHERE title = ? ");
+$query->execute($title);
 
-if ($titulo) {
-		my $archivo = "Paginas/$titulo";
-    open(my $doc, '<', $archivo) or die "No se pudo abrir el archivo '$archivo' $!";
-    while (my $linea = <$doc>) {
-        # print "<p>$linea</p>";
+if (my $article_data = $query->fetchrow_hashref) {
 
-				# Cabeceras
-    		if ($linea =~ /^(#{1,6}) (.*?)$/) {
-      			print '<h'.length($1).' class="fondo-texto">'.$2.'</h'.length($1).'>';
-    		}
+    my $content = $article_data->{Content};
 
-   		 	# Negrita y cursiva
-    		elsif ($linea =~ /\*\*\*(.*?)\*\*\*/) {
-      			print '<p class="fondo-texto"><strong><em>'.$1.'</em></strong></p>';
-    		}
+    my @lines = split (/\n/, $content);
+    foreach my $line (@lines) {
+        # Cabeceras
+        if ($line =~ /^(#{1,6}) (.*?)$/) {
+            print '<h'.length($1).' class="fondo-texto">'.$2.'</h'.length($1).'>';
+        }
 
-    		# Negrita y cursiva condicional
-    		elsif ($linea =~ /\*\*(.*?)\*\*/) {
-      			my $text = $1;
+        # Negrita y cursiva
+        elsif ($line =~ /\*\*\*(.*?)\*\*\*/) {
+            print '<p class="fondo-texto"><strong><em>'.$1.'</em></strong></p>';
+        }
 
-      			# Negrita y cursiva dentro
-      			if ($text =~ /^(.*?)_([^_]+)_(.*?)$/) {
-        				print "<p class='fondo-texto'><strong>$1<em>$2</em>$3</strong></p>";
-      			} 
-      			else {
-        				# Solo Negrita
-        				print "<p class='fondo-texto'><strong>$text</strong></p>";
-      			}
-    		}
+        # Negrita y cursiva condicional
+        elsif ($line =~ /\*\*(.*?)\*\*/) {
+            my $text = $1;
 
-    		# Listas
-    		elsif ($linea =~ /^(\*|\+|\-) (.*?)$/) {
-      			print '<li class="fondo-texto">'.$2.'</li>';
-    		}
+            # Negrita y cursiva dentro
+            if ($text =~ /^(.*?)_([^_]+)_(.*?)$/) {
+                print "<p class='fondo-texto'><strong>$1<em>$2</em>$3</strong></p>";
+            } 
+            else {
+                # Solo Negrita
+                print "<p class='fondo-texto'><strong>$text</strong></p>";
+            }
+        }
 
-    		# Cursiva
-    		elsif ($linea =~ /\*(.*?)\*(?!\*)/) {
-      			print '<p class="fondo-texto"><em>'.$1.'</em></p>';
-    		}
+        # Listas
+        elsif ($line =~ /^(\*|\+|\-) (.*?)$/) {
+            print '<li class="fondo-texto">'.$2.'</li>';
+        }
 
-    		# Texto tachado
-    		elsif ($linea =~ /~~(.*?)~~/) {
-      			print '<p class="fondo-texto"><del>'.$1.'</del></p>';
-    		}
+        # Cursiva
+        elsif ($line =~ /\*(.*?)\*(?!\*)/) {
+            print '<p class="fondo-texto"><em>'.$1.'</em></p>';
+        }
 
-    		# Enlaces
-    		elsif ($linea =~ /\[(.*?)\]\((.*?)\)/) {
-      			print '<a class="fondo-texto" href="'.$2.'">'.$1.'</a>';
-    		}
+        # Texto tachado
+        elsif ($line =~ /~~(.*?)~~/) {
+            print '<p class="fondo-texto"><del>'.$1.'</del></p>';
+        }
 
-    		# Bloque de codigo 
-    		elsif ($linea =~ /```/) {
+        # Enlaces
+        elsif ($line =~ /\[(.*?)\]\((.*?)\)/) {
+            print '<a class="fondo-texto" href="'.$2.'">'.$1.'</a>';
+        }
 
-      			# si encuentra otro ```, significa que acabo el bloque de codigo
-      			# resetea $contenido_bloque_codigo y $es_bloque_codigo = 0 (false)
-      			if ($es_bloque_codigo) {
-       					print '<pre class="fondo-texto"><code>'.$contenido_bloque_codigo.'</code></pre>';
-        				$es_bloque_codigo = 0;
-        				$contenido_bloque_codigo = '';
-      			} 
-						else {        
-        				# Primera vez que encuentra ```, cambia el valor de $es_bloque_codigo por 1 (true)
-        				# para captura el texto de las siguiente lineas
-        				$es_bloque_codigo = 1;
-      			}
-    		}
-				else {
-      			# Si $es_bloque_codigo es 1 (true) agrega las lineas
-      			if ($es_bloque_codigo) {
-        				$contenido_bloque_codigo .= $linea;
-      			}
-      			# Texto normal
-      			else {
-        				$linea =~ s/^\s*|\s*$//g;
-        				if ($linea ne '') {
-          					print "<p class='fondo-texto'>".$linea."</p>";
-        				}
-      			}
-    		}
-
+        # Bloque de codigo 
+        elsif ($line =~ /```/) {
+            # si encuentra otro ```, significa que acabo el bloque de codigo
+            # resetea $contenido_bloque_codigo y $es_bloque_codigo = 0 (false)
+            if ($es_bloque_codigo) {
+                print '<pre class="fondo-texto"><code>'.$contenido_bloque_codigo.'</code></pre>';
+                $es_bloque_codigo = 0;
+                $contenido_bloque_codigo = '';
+            } 
+            else {        
+                # Primera vez que encuentra ```, cambia el valor de $es_bloque_codigo por 1 (true)
+                # para captura el texto de las siguiente lineas
+                $es_bloque_codigo = 1;
+            }
+        }
+        else {
+            # Si $es_bloque_codigo es 1 (true) agrega las lineas
+            if ($es_bloque_codigo) {
+                $contenido_bloque_codigo .= $line;
+            }
+            # Texto normal
+            else {
+                $line =~ s/^\s*|\s*$//g;
+                if ($line ne '') {
+                    print "<p class='fondo-texto'>".$line."</p>";
+                }
+            }
+        }
     }
-    close $doc;
 }
 
-print<<HTML;
-		<br><br>
-		<a class="enlace" href="list.pl">Regresar al Listado</a>
-	</body>
-</html>
-HTML
+print "<br><br><a class='enlace' href='login.pl'>Volver</a>",
+	  "</body></html>";

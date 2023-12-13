@@ -14,6 +14,7 @@ my $db_pass = "";
 my $dbh  = DBI->connect("DBI:mysql:database=$db_name;host=$db_host", $db_user, $db_pass) or die "Couldn't connect to the database";
 
 my $title = $cgi->param('title');
+my $username = $cgi->param('username');
 my $es_bloque_codigo = 0;
 my $contenido_bloque_codigo = '';
 
@@ -119,7 +120,7 @@ if (my $article_data = $query->fetchrow_hashref) {
     }
 }
 
-print "<br><br><a class='enlace' href='login.pl'>Volver</a>",
+print "<br><br><a class='enlace' href='list.pl?username=$username'>Volver</a>",
 	  "</body></html>";
 		
 # FIN HTML

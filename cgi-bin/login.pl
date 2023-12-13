@@ -92,32 +92,8 @@ sub show_user_data {
     # Creo que este if esta demas, porque ya se hizo la verificacion si existe en la DB
     # Captura el objeto
     if (my $user_data = $query->fetchrow_hashref) {
-        print "Content-type: text/html\n\n",
-              "<html><head>",
-              "<meta charset=\"UTF-8\" />",
-              "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />",
-              "<title>Datos del Usuario</title></head><body>",
-              "<h1>Bienvenido $username</h1>";
-        # Extraen los datos del objeto
-        my $first_name = $user_data->{FirstName};
-        my $last_name  = $user_data->{LastName};
-        print "<p>Nombre: $first_name $last_name</p>";
-
-        # Prepara una solicitud para los articulos del usuario
-        my $query_articles = $dbh->prepare("SELECT * FROM Articles WHERE Owner = ?");
-        $query_articles->execute($username);
-
-        if (my $article_data = $query_articles->fetchrow_hashref) {
-            print "<p>Artículos:</p><ul>";
-            do {
-                my $title = $article_data->{Title};
-                print "<li>$title</li>";
-            } while ($article_data = $query_articles->fetchrow_hashref);
-            print "</ul>";
-        # Si no tiene ningun artículo    
-        } else {
-            print "<p>No has creado ningún artículo aún.</p>";
-        }
+		
+        print $cgi->redirect("list.pl?username=$username");
         print "</body></html>";
     }
 }

@@ -4,14 +4,12 @@ use warnings;
 use CGI;
 use DBI;
 
+my $cgi = CGI->new;
+
 my $db_host = "localhost";
 my $db_name = "wikipedia";
 my $db_user = "root";
 my $db_pass = "";
-
-my $dbh = DBI->connect("DBI:mysql:database=$db_name;host=$db_host", $db_user, $db_pass) or die "Couldn't connect to the database";
-
-my $cgi = CGI->new;
 
 
 print "Content-type: text/html\n\n",
@@ -20,6 +18,7 @@ print "Content-type: text/html\n\n",
       "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />",
       "<title>Registro de Usuario</title></head><body>",
       "<h1>Registro de Usuario</h1>";
+my $dbh = DBI->connect("DBI:mysql:database=$db_name;host=$db_host", $db_user, $db_pass) or die "Couldn't connect to the database";
 
 # Formulario
 print "<form method='post' action='register.pl'>",
@@ -63,7 +62,7 @@ if ($cgi->param('submit')) {
         print "<p style='color:red;'>Todos los campos son obligatorios</p>";
     }
 }
-print "<p><a href='login.pl'>Volver al Inicio de Sesión</a></p>";
+print "<p><a href='../index.html'>Volver al Inicio de Sesión</a></p>";
 
 $dbh->disconnect;
 

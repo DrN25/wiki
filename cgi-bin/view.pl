@@ -5,7 +5,6 @@ use DBI;
 use CGI;
 
 my $cgi = new CGI;
-print $cgi->header(-charset=>'utf-8');
 
 my $db_host = "localhost";
 my $db_name = "wikipedia";
@@ -19,19 +18,17 @@ my $username = $cgi->param('username');
 my $es_bloque_codigo = 0;
 my $contenido_bloque_codigo = '';
 
+print "Content-type: text/html\n\n";
 print <<HTML;
 <html>
 	<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Visualizar Pagina</title>
-		<link rel="stylesheet" type="text/css" href="../Estilos.css">
+        <link rel="stylesheet" type="text/css" href="../css/view.css">
 	</head>
 	<body>
-		<center>
-			<div class="fondo-titulo">
-				<h1 class="titulo">$title</h1>
-			</div>
-			<br></br>
-			<div class="fondo">
+		<h1 class="titulo">$title</h1>
 HTML
 
 # Prepara la DB pa
@@ -52,12 +49,12 @@ if (my $article_data = $query->fetchrow_hashref) {
 			### CONVERSION MARKDOWN
         # Cabeceras
         if ($line =~ /^(#{1,6}) (.*?)$/) {
-            print '<h'.length($1).'>'.$2.'</h'.length($1).'>';
+            print '<h'.length($1).' class="fondo-texto">'.$2.'</h'.length($1).'>';
         }
 
         # Negrita y cursiva
         elsif ($line =~ /\*\*\*(.*?)\*\*\*/) {
-            print '<p><strong><em>'.$1.'</em></strong></p>';
+            print '<p class="fondo-texto"><strong><em>'.$1.'</em></strong></p>';
         }
 
         # Negrita y cursiva condicional
@@ -66,32 +63,32 @@ if (my $article_data = $query->fetchrow_hashref) {
 
             # Negrita y cursiva dentro
             if ($text =~ /^(.*?)_([^_]+)_(.*?)$/) {
-                print "<p><strong>$1<em>$2</em>$3</strong></p>";
+                print "<p class='fondo-texto'><strong>$1<em>$2</em>$3</strong></p>";
             } 
             else {
                 # Solo Negrita
-                print "<p><strong>$text</strong></p>";
+                print "<p class='fondo-texto'><strong>$text</strong></p>";
             }
         }
 
         # Listas
         elsif ($line =~ /^(\*|\+|\-) (.*?)$/) {
-            print '<li>'.$2.'</li>';
+            print '<li class="fondo-texto">'.$2.'</li>';
         }
 
         # Cursiva
         elsif ($line =~ /\*(.*?)\*(?!\*)/) {
-            print '<p><em>'.$1.'</em></p>';
+            print '<p class="fondo-texto"><em>'.$1.'</em></p>';
         }
 
         # Texto tachado
         elsif ($line =~ /~~(.*?)~~/) {
-            print '<p><del>'.$1.'</del></p>';
+            print '<p class="fondo-texto"><del>'.$1.'</del></p>';
         }
 
         # Enlaces
         elsif ($line =~ /\[(.*?)\]\((.*?)\)/) {
-            print '<a href="'.$2.'">'.$1.'</a>';
+            print '<a class="fondo-texto" href="'.$2.'">'.$1.'</a>';
         }
 
         # Bloque de codigo 
@@ -99,7 +96,7 @@ if (my $article_data = $query->fetchrow_hashref) {
             # si encuentra otro ```, significa que acabo el bloque de codigo
             # resetea $contenido_bloque_codigo y $es_bloque_codigo = 0 (false)
             if ($es_bloque_codigo) {
-                print '<pre><code>'.$contenido_bloque_codigo.'</code></pre>';
+                print '<pre class="fondo-texto"><code>'.$contenido_bloque_codigo.'</code></pre>';
                 $es_bloque_codigo = 0;
                 $contenido_bloque_codigo = '';
             } 
@@ -118,7 +115,7 @@ if (my $article_data = $query->fetchrow_hashref) {
             else {
                 $line =~ s/^\s*|\s*$//g;
                 if ($line ne '') {
-                    print "<p>".$line."</p>";
+                    print "<p class='fondo-texto'>".$line."</p>";
                 }
             }
         }
@@ -126,10 +123,7 @@ if (my $article_data = $query->fetchrow_hashref) {
     }
 }
 
-print "<form method='get' action='list.pl'>",
-	  "<input type='hidden' name='username' value='$username'>",
-      "<input type='submit' class='boton' value='Volver'>",
-	  "</form>",
-	  "</div>",
-	  "</center>",
+print "<br><br><a class='enlace' href='list.pl?username=$username'>Volver</a>",
 	  "</body></html>";
+		
+# FIN HTML

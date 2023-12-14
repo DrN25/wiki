@@ -5,7 +5,6 @@ use DBI;
 
 my $cgi = CGI->new;
 my $username = $cgi->param('username');
-print $cgi->header(-charset=>'utf-8');
 
 if ($cgi->param('titulo')) {
     my $titulo = $cgi->param('titulo');
@@ -19,65 +18,74 @@ if ($cgi->param('titulo')) {
     my $dbh = DBI->connect("DBI:mysql:database=$db_name;host=$db_host", $db_user, $db_pass) or die "Couldn't connect to the database";
 
     my $query = $dbh->prepare("INSERT INTO articles (Title, Content, Owner) VALUES (?, ?, ?)");
-    $query->execute($titulo, $cuerpo, $username);
+    if ($query->execute($titulo, $cuerpo, $username)) {
+        print $cgi->header('text/html');
+        print <<HTML;
+        <!DOCTYPE HTML>
+        <html>
+        <head>
+            <title>Pagina Creada</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="stylesheet" type="text/css" href="../css/new.css">
+        </head>
+        <body>
+            <div class="mensaje">El articulo "$titulo" ha sido creado correctamente</div>
+            <div class="volver">
+                <a href='list.pl?username=$username'>Volver al listado</a>
+            </div>
+            <a class="enlace-visualizar" href='view.pl?title=$titulo&username=$username'>Visualizar</a>
 
-    # Mostrar el mensaje de confirmación con enlaces
-    print <<HTML;
-    <!DOCTYPE HTML>
-    <html>
-    <head>
-        <title>Pagina Creada</title>
-        <link rel="stylesheet" type="text/css" href="../Estilos.css">
-    </head>
-    <body>
-		<div class="fondo-titulo">
-			<h1 class="titulo">La página "$titulo" ha sido creada correctamente</h1>
-		</div>
-		<br></br>
-		<div class="fondo">
-			<h3>Pagina grabada</h3>
-		</div>
-		<br></br>
-        <form method='get' action='list.pl'>
-			<input type='hidden' name='username' value='$username'>
-			<button type='submit' class='boton'>Listado de Paginas</button>
-		</form>
-		<br>
-		<form method='get' action='view.pl'>
-			<input type='hidden' name='title' value='$titulo'>
-			<input type='hidden' name='username' value='$username'>
-			<button type='submit' class='boton'>Visualizar</button>
-		</form>
-    </body>
-    </html>
+        </body>
+        </html>
 HTML
-	$dbh->disconnect;
+    } else {
+        print "Content-type: text/html\n\n";
+        print <<HTML;
+        <!DOCTYPE HTML>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Crear Nueva Pagina</title>
+            <link rel="stylesheet" type="text/css" href="../css/new.css">
+        </head>
+        <body>
+            <div class="error">Error al crear el articulo</div>
+            <div class="volver">
+                <a href='list.pl?username=$username'>Volver al listado</a>
+            </div>
+        </body>
+        </html>
+HTML
+    }
+    $dbh->disconnect;
 } else {
+    print "Content-type: text/html\n\n";
     print <<HTML;
     <!DOCTYPE HTML>
     <html>
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Crear Nueva Pagina</title>
-        <link rel="stylesheet" type="text/css" href="../Estilos.css">
+        <link rel="stylesheet" type="text/css" href="../css/new.css">
     </head>
     <body>
-		<center>
-			<div class="fondo-titulo">
-				<h1 class="titulo">Crea tu Pagina Web</h1>
-			</div>
-			<br></br>
-			<div class="fondo">
-				<form method="post" action="new.pl">
-					<input type="hidden" name="username" value="$username">
-					<p style='text-align: left;'><strong>Titulo de la Página:</strong></p>
-					<input type="text" class='campo' name="titulo">
-					<p style='text-align: left;'><strong>Contenido:</strong></p>
-					<textarea name="cuerpo" cols='50' rows='15'></textarea>
-					<br></br>
-					<input type="submit" class="boton" value="Enviar">
-				</form>
-			</div>
-		</center>
+        <h1 class="titulo">Crea tu Articulo</h1>
+        <form method="post" action="new.pl">
+            <input type="hidden" name="username" value="$username">
+            <label for="titulo">Titulo del Articulo:</label>
+            <input type="text" name="titulo">
+            <br>
+            <label for="cuerpo">Contenido:</label>
+            <textarea name="cuerpo" cols='50' rows='10'></textarea>
+            <br>
+            <input type="submit" value="Enviar">
+        </form>
+        <div class="volver">
+            <a href='list.pl?username=$username'>Volver al listado</a>
+        </div>
     </body>
     </html>
 HTML

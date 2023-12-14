@@ -3,27 +3,45 @@
 <head>
 	<title>WIKIPEDIA</title>
 	<link rel="stylesheet" type="text/css" href="Estilos.css">
+	<meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
 </head>
 <body>
-	<center>
-		<h1 class="titulo">PAGINA DE INICIO - WIKIPEDIA</h1>
-		<h3>Curso: PROGRAMACION WEB I</h3>
-		<h3>Integrantes:</h3>
-		<ul>
-			<li>Cutimbo Quispe Keneth Sebastian</li>
-			<li>Nina Calizaya Rafael Diego</li>
-			<li>Pamo Condori Benjamin Andre</li>
-			<li>Quispe Saavedra Dennis Javier</li>
-		</ul>
-		<p>Bienvenido a nuestra pagina web. Podras crear, editar y eliminar tus propias paginas.<br>
-		Para continuar logueate con tu usuario y contraseña, de lo contrario, puedes registrarte.</p>
-		<form method="post" action="cgi-bin/login.pl">
-			<input class="boton" type="submit" value="Login">
-		</form>
-		<br>
-		<form method="post" action="cgi-bin/register.pl">
-			<input class="boton" type="submit" value="Register">
-		</form>
-	</center>
+    <center>
+		<div class="fondo-titulo">	
+			<h1>PAGINA DE INICIO - WIKIPEDIA</h1>
+		</div>
+		<br></br><br></br>
+		<div class="fondo">	
+            <p>Bienvenido a nuestra pagina web. Podras crear y hacer consultas sobre tus propias paginas web.</p>
+			<p>Para continuar, Inicia Sesion o Registrate si aun no tienes una cuenta</p>
+            <br></br>
+			<table>
+                <tr>
+                    <td>
+                        <form method="post" action="cgi-bin/login.pl">
+                            <input class="boton" type="submit" value="Login">
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" action="cgi-bin/register.pl">
+                            <input class="boton" type="submit" value="Register">
+                        </form>
+                    </td>
+                </tr>
+            </table>
+		</div>
+		<br></br><br></br>
+		<div class="fondo-titulo">	
+			<p><strong>CURSO:</strong> PROGRAMACION WEB I</p>
+			<p><strong>Integrantes:</strong></p>
+			<ul>
+				<li>Cutimbo Quispe Keneth Sebastian</li>
+				<li>Nina Calizaya Rafael Diego</li>
+				<li>Pamo Condori Benjamin Andre</li>
+				<li>Quispe Saavedra Dennis Javier</li>
+			</ul>
+		</div>
+    </center>
 </body>
 </html>

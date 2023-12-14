@@ -15,7 +15,6 @@ body {
     background-color: rgba(0, 0, 10, 0.5);
 	color: white;
     padding: 20px 50px;
-	position: relative;
 	display: inline-block;
 }
 ul {
@@ -30,11 +29,9 @@ ul {
     margin-bottom: 25px;
 	width: 250px;
 }
-.boton{
-	position: relative;
+.boton {
 	background-color: black;
 	color: white;
-	border: solid 1px gray;
 	border-radius: 5px;
 	padding: 12px 20px;
 	border: none;
@@ -57,19 +54,4 @@ table {
     text-align: center;
 	color: white;
     text-decoration: none;
-    display: block;
-}
-.enlace {
-	padding: 5px 20px;
-	color: #1a4266;
-	font-family: Helvetica;
-	font-size: 20px;
-	font-weight: bold;
-}
-.enlace:hover {
-    color: #4de2e0;
-}
-.fondo-texto {
-    background-color: white;
-	width: 25%;
 }

@@ -4,8 +4,8 @@ use CGI;
 use DBI;
 
 my $cgi = CGI->new;
+print $cgi->header(-charset=>'utf-8');
 
-print "Content-type: text/html\n\n";
 print <<HTML;
 <html>
     <head>
@@ -33,28 +33,36 @@ if ($cgi->param('cuerpo')) {
     my $contenido = $cgi->param('cuerpo');
     $query = $dbh->prepare("UPDATE articles SET Content = ? WHERE Title = ? AND Owner = ?");
     $query->execute($contenido, $titulo, $username);
-    print "Se han modificado los cambios<br>";
+    print "<div class='fondo'>",
+		  "<p>Se han modificado los cambios</p>",
+		  "</div><br>";
     $content = $contenido;
 }
 
 print <<HTML;
-    <h1 class="titulo">$titulo</h1>
-    <table>
-        <form method='post' action='edit.pl'>
-            <input type='hidden' name='title' value='$titulo'>
-            <input type='hidden' name='username' value='$username'>
-            <tr>
-                <td>Texto</td>
-                <td><textarea name='cuerpo' cols='50' rows='10'>$content</textarea><br></td>
-            </tr>
-            <tr><td><input class="boton" type='submit' value='Enviar'></tr></td>
-            <tr><td><a class="enlace" href="list.pl?username=$username">Cancelar</a></tr></td>
-        </form>
-    </table>
-    <br>
-HTML
-
-print <<HTML;
+		<center>
+			<div class="fondo-titulo">
+				<h1 class="titulo">$titulo</h1>
+			</div>
+			<br></br>
+			<div class="fondo">
+				<table>
+					<form method='post' action='edit.pl'>
+						<input type='hidden' name='title' value='$titulo'>
+						<input type='hidden' name='username' value='$username'>
+						<tr><td><strong>Texto</strong></td></tr>
+						<tr><td><textarea name='cuerpo' cols='50' rows='10'>$content</textarea><br></td></tr>
+						<tr><td><input class="boton" type='submit' value='Enviar'></tr></td>
+					</form>
+					<br></br>
+				</table>
+				<form method='get' action='list.pl'>
+					<input type='hidden' name='username' value='$username'>
+					<button type='submit' class='boton'>Volver</button>
+				</form>
+			</div>
+			<br>
+		</center>	
     </body>
 </html>
 HTML

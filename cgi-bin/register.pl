@@ -13,20 +13,31 @@ my $db_pass = "";
 
 
 print "Content-type: text/html\n\n",
-      "<html><head>",
-      "<meta charset=\"UTF-8\" />",
+	  "<html><head>",
+	  "<link rel='stylesheet' type='text/css' href='../Estilos.css'>",
+	  "<meta charset=\"UTF-8\" />",
       "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />",
       "<title>Registro de Usuario</title></head><body>",
-      "<h1>Registro de Usuario</h1>";
+      "<html><head>",
+	  "<center>",
+	  "<div class='fondo-titulo'>",
+      "<h1>Crear Cuenta</h1>",
+	  "</div>",
+	  "<br></br>";
 my $dbh = DBI->connect("DBI:mysql:database=$db_name;host=$db_host", $db_user, $db_pass) or die "Couldn't connect to the database";
 
 # Formulario
-print "<form method='post' action='register.pl'>",
-      "<p>Nombre de Usuario: <input type='text' name='username'></p>",
-      "<p>Contraseña: <input type='password' name='password'></p>",
-      "<p>Nombres: <input type='text' name='firstname'></p>",
-      "<p>Apellidos: <input type='text' name='lastname'></p>",
-      "<p><input type='submit' name='submit' value='Registrarse'></p>",
+print "<div class=\"fondo\">",
+	  "<form method='post' action='register.pl'>",
+      "<p style='text-align: left;'>Usuario:</p>",
+	  "<input type='text' class='campo' placeholder='Ingrese Usuario' name='username'>",
+      "<p style='text-align: left;'>Contraseña:</p>",
+	  "<input type='password' class='campo' placeholder='Ingrese Contraseña' name='password'>",
+      "<p style='text-align: left;'>Nombres:</p>",
+	  "<input type='text' class='campo' placeholder='Ingrese Nombres' name='firstname'>",
+      "<p style='text-align: left;'>Apellidos:</p>",
+	  "<input type='text' class='campo' placeholder='Ingrese Apellidos' name='lastname'>",
+      "<p><input type='submit' name='submit' class='boton' value='Registrarse'></p>",
       "</form>";
       
 # Verifica si se recibio el submit
@@ -62,7 +73,7 @@ if ($cgi->param('submit')) {
         print "<p style='color:red;'>Todos los campos son obligatorios</p>";
     }
 }
-print "<p><a href='../index.html'>Volver al Inicio de Sesión</a></p>";
+print "<p><a href='../index.html'>Volver a la Pagina Principal</a></p>";
 
 $dbh->disconnect;
 

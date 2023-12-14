@@ -4,11 +4,11 @@ use CGI;
 use DBI;
 
 my $cgi = CGI->new;
+print $cgi->header(-charset=>'utf-8');
 my $dbh = DBI->connect("DBI:mysql:database=wikipedia;host=localhost", "root", "") or die "Couldn't connect to the database";
 
 my $username = $cgi->param('username');
 
-print "Content-type: text/html\n\n";
 print <<HTML;
 <html>
 	<head>
@@ -16,7 +16,10 @@ print <<HTML;
 		<link rel="stylesheet" type="text/css" href="../Estilos.css">
 	</head>
 	<body>
-		<h1 class="titulo">Bienvenido $username</h1>
+		<div class="fondo-titulo">
+			<h1 class="titulo">Bienvenido $username</h1>
+		</div>
+		<br><br><br>
 HTML
 
 # Prepara una solicitud para los artículos del usuario
@@ -24,6 +27,7 @@ my $query_articles = $dbh->prepare("SELECT * FROM Articles WHERE Owner = ?");
 $query_articles->execute($username);
 
 if (my $article_data = $query_articles->fetchrow_hashref) {
+	print "<div class='fondo'>";
     print "<table>";
     do {
         my $title = $article_data->{Title};
@@ -35,17 +39,24 @@ if (my $article_data = $query_articles->fetchrow_hashref) {
         print "</tr>";
     } while ($article_data = $query_articles->fetchrow_hashref);
     print "</table>";
+	print "</div>";
 } else {
+	print "<div class='fondo'>";
     print "<p>No has creado ningún artículo aún.</p>";
+	print "</div>";
 }
 
 print <<HTML;
-		<br>
-		<a class="enlace" href='new.pl?username=$username'>Nueva Pagina</a><br><br>
-		<a class="enlace" href='../index.html'>Volver al Inicio</a>
-	</body>
+    <br><br>
+    <form method='post' action='new.pl'>
+        <input type='hidden' name='username' value='$username'>
+        <button type='submit' class='boton'>Nueva Pagina</button>
+    </form>
+    <form method='get' action='../index.html'>
+        <button type='submit' class='boton'>Volver al Inicio</button>
+    </form>
+</body>
 </html>
 HTML
 
-$dbh->disconnect;
 $dbh->disconnect;

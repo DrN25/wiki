@@ -1,45 +1,51 @@
 body {
-	background-color: #8dbad4;
-	font-family: cursive;
+	background-color: #1a2533;
+	color: white;
+	font-family: sans-serif;
 }
-.titulo {
-	font-family: 'Comic Sans MS', sans-serif;
-	color: #4de2e0;
+.fondo-titulo {
+	color: gray;
+	font-family: sans-serif;
 	display: inline-block;
-	border-radius: 20px;
-	padding: 10px 20px;
-	background-color: #1a4266;
+	border-radius: 5px;
+	padding: 0px 100px;
+	background-color: black;
+}
+.fondo {
+    background-color: rgba(0, 0, 10, 0.5);
+	color: white;
+    padding: 20px 50px;
+	position: relative;
+	display: inline-block;
 }
 ul {
 	list-style-type: none;
 }
+.campo {
+    border: none;
+    outline: none;
+    border-bottom: 1px solid gray;
+    background-color: transparent;
+    color: white;
+    margin-bottom: 25px;
+	width: 250px;
+}
 .boton{
 	position: relative;
-	background-color: #303134;
+	background-color: black;
 	color: white;
 	border: solid 1px gray;
 	border-radius: 5px;
 	padding: 12px 20px;
 	border: none;
 }
-.fondo1 {
-	z-index: -1;
-	position: absolute;
-	top: 115px;
-	width: 40%;
-	left: 600px;
-	height: 380px;
-	background-color: #47b1d1;
-	border-radius: 15px;
-}
-.tabla td{
-	padding: 20px 5px;
+table {
+  border-spacing: 15px;
 }
 .enlaceNombre {
 	border-radius: 10px;
-    background-color: #f2f2f2;
     padding: 15px;
-	color: black;
+	color: white;
 }
 .enlaceNombre:hover {
     color: blue;

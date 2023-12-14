@@ -5,6 +5,7 @@ use CGI;
 use DBI;
 
 my $cgi = CGI->new;
+print $cgi->header(-charset=>'utf-8');
 
 my $db_host = "localhost";
 my $db_name = "wikipedia";
@@ -12,8 +13,7 @@ my $db_user = "root";
 my $db_pass = "";
 
 
-print "Content-type: text/html\n\n",
-	  "<html><head>",
+print "<html><head>",
 	  "<link rel='stylesheet' type='text/css' href='../Estilos.css'>",
 	  "<meta charset=\"UTF-8\" />",
       "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />",
@@ -78,5 +78,3 @@ print "<p><a href='../index.html'>Volver a la Pagina Principal</a></p>";
 $dbh->disconnect;
 
 print "</body></html>";
-
-# FIN HTML

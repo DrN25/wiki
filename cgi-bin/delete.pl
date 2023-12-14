@@ -4,11 +4,11 @@ use CGI;
 use DBI;
 
 my $cgi = CGI->new;
+print $cgi->header(-charset=>'utf-8');
 
 my $titulo = $cgi->param('title');
 my $username = $cgi->param('username');
 
-print "Content-type: text/html\n\n";
 print <<HTML;
 <html>
     <head>
@@ -16,6 +16,8 @@ print <<HTML;
         <link rel="stylesheet" type="text/css" href="../Estilos.css">
     </head>
     <body>
+	<center>
+		<div class="fondo">
 HTML
 
 my $db_host = "localhost";
@@ -37,9 +39,14 @@ if ($titulo) {
 	$dbh->disconnect;
 }
 print <<HTML;
-        <br>
-        <a class="enlace" href="list.pl?username=$username">Regresar al Listado</a>
-    </body>
+			<br>
+			<form method="get" action="list.pl">
+			  <input type="hidden" name="username" value="$username">
+			  <input type="submit" class="boton" value="Regresar al Listado">
+			</form>
+		</div>
+    </center>
+	</body>
 </html>
 
 HTML

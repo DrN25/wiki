@@ -4,12 +4,13 @@ use warnings;
 use CGI;
 use DBI;
 
+my $cgi  = CGI->new;
+
 my $db_host = "localhost";
 my $db_name = "wikipedia";
 my $db_user = "root";
 my $db_pass = "";
 
-my $cgi  = CGI->new;
 my $dbh  = DBI->connect("DBI:mysql:database=$db_name;host=$db_host", $db_user, $db_pass) or die "Couldn't connect to the database";
 
 # Verifica si se recibió el submit
@@ -56,8 +57,8 @@ if ($cgi->param('submit')) {
 $dbh->disconnect;
 
 sub show_login_form {
-    print "Content-type: text/html\n\n",
-          "<html><head>",
+	print $cgi->header(-charset=>'utf-8');
+    print "<html><head>",
           "<title>Iniciar Sesión</title>",
           "<link rel='stylesheet' type='text/css' href='../Estilos.css'>",
           "<meta charset='UTF-8'>",

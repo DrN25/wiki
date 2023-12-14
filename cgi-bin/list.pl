@@ -5,7 +5,13 @@ use DBI;
 
 my $cgi = CGI->new;
 print $cgi->header(-charset=>'utf-8');
-my $dbh = DBI->connect("DBI:mysql:database=wikipedia;host=localhost", "root", "") or die "Couldn't connect to the database";
+
+my $db_host = "localhost";
+my $db_name = "wikipedia";
+my $db_user = "root";
+my $db_pass = "";
+
+my $dbh  = DBI->connect("DBI:mysql:database=$db_name;host=$db_host", $db_user, $db_pass) or die "Couldn't connect to the database";
 
 my $username = $cgi->param('username');
 
